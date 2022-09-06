@@ -1,137 +1,3 @@
-// // 1 таби:
-
-// window.addEventListener("DOMContentLoaded", () => {
-//   // 1
-
-//   //обертка переключателів
-//   const tabsParent = document.querySelector(".tabheader__items");
-//   // самі ссилки
-//   const tabs = document.querySelectorAll(".tabheader__item");
-//   // наповнення
-//   const tabsContent = document.querySelectorAll(".tabcontent");
-
-//   // 2 скриття:
-
-//   // функція, що сдодає клас скриття і відбирає показу
-//   function hideTabContent() {
-//     // для кожного контенту даєм стиль при якому його не видно
-//     tabsContent.forEach((item) => {
-//       // + стиль скрить
-//       item.classList.add("hide");
-//       // - стиль видно і анімація при видаленні
-//       item.classList.remove("show", "fade");
-//     });
-
-//     // також для кожного елементу табу(лінків) відбираєм стиль 'ектів'
-//     tabs.forEach((item) => {
-//       item.classList.remove("tabheader__item_active");
-//     });
-//   }
-
-//   // 3 показ:
-//   // функія зо відбирає клас для скриття і додає для показу
-
-//   function showTabContent(i = 0) {
-//     //0 коли нема іншого аргумента
-//     // передаєм число (і)
-
-//     // заданому елементу додаєм клас(щоб скрити або показати)
-//     tabsContent[i].classList.add("show", "fade");
-
-//     tabsContent[i].classList.remove("hide");
-
-//     // до табу що зараз визваний додаю клас (для показу жирнішим)
-//     tabs[i].classList.add("tabheader__item_active");
-//   }
-
-//   // визов їх
-//   hideTabContent();
-//   showTabContent();
-
-//   // 4
-
-//   // подія, вішаем на батьківський ел:
-//   tabsParent.addEventListener("click", (e) => {
-//     const target = e.target;
-//     // якщо клік на балькові і на якійсь ссилці(табові), то
-//     if (target && target.classList.contains("tabheader__item")) {
-//       // у масиві берем таб і його номер
-//       tabs.forEach((item, i) => {
-//         // якщо нажатий ел є табом, то:
-//         if (target == item) {
-//           // скриваєм усе
-//           hideTabContent();
-//           // а потім показуєм вказаний номер
-//           showTabContent(i);
-//         }
-//       });
-//     }
-//   });
-
-//   //   2 модальне вікно
-
-//   const btnTrigerModal = document.querySelectorAll("[data-modal]");
-//   const modalWindow = document.querySelector(".modal");
-//   const closeModalBtn = document.querySelector("[data-close]");
-
-//   function openModal() {
-//     modalWindow.classList.add("show");
-//     modalWindow.classList.remove("hide");
-//     document.body.style.overflow = "hidden";
-//     //  очищуєм таймер
-//     clearInterval(modalTimer);
-//   }
-
-//   function closeModal() {
-//     modalWindow.classList.add("hide");
-//     modalWindow.classList.remove("show");
-//     document.body.style.overflow = "";
-//   }
-
-//   btnTrigerModal.forEach((btn) => {
-//     btn.addEventListener("click", openModal);
-//   });
-
-//   closeModalBtn.addEventListener("click", closeModal);
-
-//   // модальне вікно на ввесь екран (окрім вводу), тому при клікові коло нього закриваю його
-//   modalWindow.addEventListener("click", (e) => {
-//     if (e.target === modalWindow) {
-//       closeModal();
-//     }
-//   });
-//   // при esc
-//   document.addEventListener("keydown", (e) => {
-//     if (e.code === "Escape" && modalWindow.classList.contains("show")) {
-//       closeModal();
-//     }
-//   });
-
-//   // відкриття модального вікна автоматично ()
-//   const modalTimer = setTimeout(openModal, 5000);
-
-//   // якщо прокручена частина (к-сть прокручених пікселів) + видима частина (без прокрутки) (те що ми прорутили і наразі бачим) >= повної прокрутки (все, що є)
-//   function showModalByScroll() {
-//     if (
-//       window.pageYOffset + document.documentElement.clientHeight >=
-//       document.documentElement.scrollHeight - 1 )
-// 		{
-//       openModal();
-// 		// скидаю подію, щоб вона не повторювалась
-// 		window.removeEventListener("scroll", showModalByScroll);
-//     }
-//   }
-
-//   window.addEventListener("scroll", showModalByScroll);
-
-// });
-//
-//
-//
-//
-//
-// 									Чистовик
-
 //										 1 Таби
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -178,7 +44,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  //   									2 Модальні вікна
+  //   						2 Модальні вікна
 
   const modalWindow = document.querySelector(".modal"),
     modalBtns = document.querySelectorAll("[data-modal]"),
@@ -215,19 +81,82 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  //   							3 Модальні вікна таймер
+  //   					3 Модальні вікна таймер
 
-  const timerModal = setTimeout(openModal, 10000);
+  //   const timerModal = setTimeout(openModal, 10000);
 
-  function showModalByScroll() {
-    if (
-      window.pageYOffset + document.documentElement.clientHeight >=
-      document.documentElement.scrollHeight - 1
-    ) {
-      openModal();
-      window.removeEventListener("scroll", showModalByScroll);
+  //   function showModalByScroll() {
+  //     if (
+  //       window.pageYOffset + document.documentElement.clientHeight >=
+  //       document.documentElement.scrollHeight - 1
+  //     ) {
+  //       openModal();
+  //       window.removeEventListener("scroll", showModalByScroll);
+  //     }
+  //   }
+
+  //   window.addEventListener("scroll", showModalByScroll);
+
+  //							Класи
+
+  class MenuCard {
+    constructor(src, alt, title, describe, price, parentSelector) {
+      this.src = src;
+      this.alt = alt;
+      this.title = title;
+      this.describe = describe;
+      this.price = price;
+      this.parent = document.querySelector(parentSelector);
+      this.exchange = 37;
+      this.convertUAH();
+    }
+    convertUAH() {
+      this.price = +this.price * +this.exchange;
+    }
+    renderCard() {
+      const card = document.createElement("div");
+      card.innerHTML = `
+			<div class="menu__item">
+      		<img src=${this.src} alt=${this.alt}/>
+            <h3 class="menu__item-subtitle">${this.title}</h3>
+            <div class="menu__item-descr">${this.describe}</div>
+            <div class="menu__item-divider"></div>
+            <div class="menu__item-price">
+              <div class="menu__item-cost">Цена:</div>
+              <div class="menu__item-total">
+                <span>${this.price}</span> грн/день
+              </div>
+            </div>
+          </div>
+		`;
+      this.parent.append(card);
     }
   }
 
-  window.addEventListener("scroll", showModalByScroll);
+  new MenuCard(
+    "img/tabs/vegy.jpg",
+    "vegy",
+    'Меню "Фитнес"',
+    'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+    9,
+    ".menu .container"
+  ).renderCard();
+
+  new MenuCard(
+    "img/tabs/post.jpg",
+    "post",
+    'Меню "Постное"',
+    "Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.",
+    14,
+    ".menu .container"
+  ).renderCard();
+
+  new MenuCard(
+    "img/tabs/elite.jpg",
+    "elite",
+    "Меню “Премиум”",
+    "В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!",
+    21,
+    ".menu .container"
+  ).renderCard();
 });
