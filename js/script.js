@@ -100,12 +100,16 @@ window.addEventListener("DOMContentLoaded", () => {
   //							Класи
 
   class MenuCard {
-    constructor(src, alt, title, describe, price, parentSelector) {
+    constructor(src, alt, title, describe, price, parentSelector, ...classes) {
       this.src = src;
       this.alt = alt;
       this.title = title;
       this.describe = describe;
       this.price = price;
+
+      // додаю додаткові класи в масив
+      this.classes = classes;
+
       this.parent = document.querySelector(parentSelector);
       this.exchange = 37;
       this.convertUAH();
@@ -115,8 +119,19 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     renderCard() {
       const card = document.createElement("div");
+
+		// якщо класи не вказані, то
+      if (this.classes.length === 0) {
+			// даєм карточці клас за замовчуванням
+        this.card = "menu__item";
+			// і прописуєм його в класах
+        card.classList.add(this.card);
+      } else {
+			// додаю клас в початок карти з ім'ям, що прийшло з масиву
+        this.classes.forEach((className) => card.classList.add(className));
+      }
+
       card.innerHTML = `
-			<div class="menu__item">
       		<img src=${this.src} alt=${this.alt}/>
             <h3 class="menu__item-subtitle">${this.title}</h3>
             <div class="menu__item-descr">${this.describe}</div>
@@ -127,7 +142,6 @@ window.addEventListener("DOMContentLoaded", () => {
                 <span>${this.price}</span> грн/день
               </div>
             </div>
-          </div>
 		`;
       this.parent.append(card);
     }
@@ -139,7 +153,9 @@ window.addEventListener("DOMContentLoaded", () => {
     'Меню "Фитнес"',
     'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
     9,
-    ".menu .container"
+    ".menu .container",
+	//  тепер навіть коли клас не вказаний, то він ставиться по дефолту
+   //  "menu__item"
   ).renderCard();
 
   new MenuCard(
@@ -148,7 +164,8 @@ window.addEventListener("DOMContentLoaded", () => {
     'Меню "Постное"',
     "Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.",
     14,
-    ".menu .container"
+    ".menu .container",
+    "menu__item"
   ).renderCard();
 
   new MenuCard(
@@ -157,10 +174,11 @@ window.addEventListener("DOMContentLoaded", () => {
     "Меню “Премиум”",
     "В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!",
     21,
-    ".menu .container"
+    ".menu .container",
+    "menu__item"
   ).renderCard();
 
-	//   if
+  //   if
   // const card1 = new MenuCard(
   // 	"img/tabs/vegy.jpg",
   //    "vegy",
@@ -170,4 +188,3 @@ window.addEventListener("DOMContentLoaded", () => {
   //    ".menu .container"
   // 	).renderCard();
 });
-
