@@ -159,4 +159,15 @@ window.addEventListener("DOMContentLoaded", () => {
     21,
     ".menu .container"
   ).renderCard();
+
+	//   if
+  // const card1 = new MenuCard(
+  // 	"img/tabs/vegy.jpg",
+  //    "vegy",
+  //    'Меню "Фитнес"',
+  //    'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+  //    9,
+  //    ".menu .container"
+  // 	).renderCard();
 });
+
