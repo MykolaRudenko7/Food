@@ -120,14 +120,14 @@ window.addEventListener("DOMContentLoaded", () => {
     renderCard() {
       const card = document.createElement("div");
 
-		// якщо класи не вказані, то
+      // якщо класи не вказані, то
       if (this.classes.length === 0) {
-			// даєм карточці клас за замовчуванням
+        // даєм карточці клас за замовчуванням
         this.card = "menu__item";
-			// і прописуєм його в класах
+        // і прописуєм його в класах
         card.classList.add(this.card);
       } else {
-			// додаю клас в початок карти з ім'ям, що прийшло з масиву
+        // додаю клас в початок карти з ім'ям, що прийшло з масиву
         this.classes.forEach((className) => card.classList.add(className));
       }
 
@@ -153,9 +153,9 @@ window.addEventListener("DOMContentLoaded", () => {
     'Меню "Фитнес"',
     'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
     9,
-    ".menu .container",
-	//  тепер навіть коли клас не вказаний, то він ставиться по дефолту
-   //  "menu__item"
+    ".menu .container"
+    //  тепер навіть коли клас не вказаний, то він ставиться по дефолту
+    //  "menu__item"
   ).renderCard();
 
   new MenuCard(
