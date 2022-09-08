@@ -188,64 +188,99 @@ window.addEventListener("DOMContentLoaded", () => {
   //   								Server
 
   // forms
+  // форми
   const forms = document.querySelectorAll("form");
+  // об'єкт з повідомленнями
   const message = {
     loading: "img/form/spinner.svg",
     success: "Спасибо! Скоро мы с вами звяжемся",
     failure: "Что-то пошло не так...",
   };
 
+  // для кожної форми виконуєм функцію
   forms.forEach((form) => {
     postData(form);
   });
 
+  // ф-ція яка працює при відправці форми
   function postData(form) {
     form.addEventListener("submit", (e) => {
+      // скидаю перезаваантаження при відправці форми
       e.preventDefault();
 
+      // повідомлення, що вивожу в модальне вікно, спінер (стан відправки)
       const statusMessage = document.createElement("div");
+      // прописою атрибут з шляхом до картинки
       statusMessage.src = message.loading;
+      // стиль
       statusMessage.style.cssText = `
 			display: block;
 			margin: 0 auto;
 		`;
-      // form.append(statusMessage);
+      // у верстку
       form.insertAdjacentElement("afterend", statusMessage);
 
-      const request = new XMLHttpRequest();
-      request.open("POST", "server.php");
-      request.setRequestHeader("Content-type", "application/json");
-
+      // обєкт форм дата (для передачі данних форм) і передать використовуючи XMLHttp... або конвертувати в JSON
       const formData = new FormData(form);
+
+      // для конвертації форм дати
       const object = {};
+      // перебираю formData і поміщаю в об'єкт
       formData.forEach(function (value, key) {
+        // ключ об'єкту = значенню з форм дата
         object[key] = value;
       });
 
-      const json = JSON.stringify(object);
-      request.send(json);
-
-      request.addEventListener("load", () => {
-        if (request.status === 200) {
-          console.log(request.response);
+      // краща альтернатива XMLHttp
+      // запрос на отправку данних 1url
+      fetch("server.php", {
+        // 2 obj setings
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        // тип даних тіла повинен відповідати заголовку
+        // превожу мій об'єкт (конверт форм дата) в фоормат Json
+        body: JSON.stringify(object),
+      })
+        // fetch працює на промісах
+        // отримую дату(якщо все норм(response)) і конвертую в текст utf 8
+        .then((data) => data.text())
+        // затим вивожу
+        .then((data) => {
+          // вивожу в консоль
+          console.log(data);
+          //  показую в модальному вікні повідомленя, що все добре
           showThanksModal(message.success);
-          form.reset();
+          //  видаляю спінер
           statusMessage.remove();
-        } else {
+        })
+        // при помилці
+        .catch(() => {
+          // показую в модальному вікні, що щось не так
           showThanksModal(message.failure);
-        }
-      });
+        })
+        // дія завжди
+        .finally(() => {
+          // скидаю форму
+          form.reset();
+        });
     });
   }
 
   // spiner
 
+  //   ф-ція показу модального вікна
   function showThanksModal(message) {
+    // в константу беру модальне вікно (текст і форму безпосередньо)
     const prevModalDialog = document.querySelector(".modal__dialog");
+    // ховаю
     prevModalDialog.classList.add("hide");
 
+    // показую модальне вікно
     openModal();
 
+    // верстаю текст для виводу на місце де була форма з текстом
     const thanksModal = document.createElement("div");
     thanksModal.classList.add("modal__dialog");
     thanksModal.innerHTML = `
@@ -256,10 +291,14 @@ window.addEventListener("DOMContentLoaded", () => {
 		`;
     document.querySelector(".modal").append(thanksModal);
 
+	//  ця ф-ція триває 4с
     setTimeout(() => {
+		// видаляю стан 
       thanksModal.remove();
+		// показую стару форму
       prevModalDialog.classList.add("show");
       prevModalDialog.classList.remove("hide");
+		// і ховаю стару форму
       hideModal();
     }, 4000);
   }
