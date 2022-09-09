@@ -291,15 +291,22 @@ window.addEventListener("DOMContentLoaded", () => {
 		`;
     document.querySelector(".modal").append(thanksModal);
 
-	//  ця ф-ція триває 4с
+    //  ця ф-ція триває 4с
     setTimeout(() => {
-		// видаляю стан 
+      // видаляю стан
       thanksModal.remove();
-		// показую стару форму
+      // показую стару форму
       prevModalDialog.classList.add("show");
       prevModalDialog.classList.remove("hide");
-		// і ховаю стару форму
+      // і ховаю стару форму
       hideModal();
     }, 4000);
   }
+
+  //   fetch - принести
+  fetch("http://localhost:3000/menu")
+    // декодую відповідь в формат JSON
+    .then((data) => data.json())
+    // вивожу
+    .then((res) => console.log(res));
 });
