@@ -115,53 +115,53 @@ window.addEventListener("DOMContentLoaded", () => {
   //
   // 1й метод шаблонізація
   //
-  //   class MenuCard {
-  //     constructor(src, alt, title, describe, price, parentSelector, ...classes) {
-  //       this.src = src;
-  //       this.alt = alt;
-  //       this.title = title;
-  //       this.describe = describe;
-  //       this.price = price;
+//   class MenuCard {
+//     constructor(src, alt, title, describe, price, parentSelector, ...classes) {
+//       this.src = src;
+//       this.alt = alt;
+//       this.title = title;
+//       this.describe = describe;
+//       this.price = price;
 
-  //       // додаю додаткові класи в масив
-  //       this.classes = classes;
+//       // додаю додаткові класи в масив
+//       this.classes = classes;
 
-  //       this.parent = document.querySelector(parentSelector);
-  //       this.exchange = 37;
-  //       this.convertUAH();
-  //     }
-  //     convertUAH() {
-  //       this.price = +this.price * +this.exchange;
-  //     }
-  //     renderCard() {
-  //       const card = document.createElement("div");
+//       this.parent = document.querySelector(parentSelector);
+//       this.exchange = 37;
+//       this.convertUAH();
+//     }
+//     convertUAH() {
+//       this.price = +this.price * +this.exchange;
+//     }
+//     renderCard() {
+//       const card = document.createElement("div");
 
-  //       // якщо класи не вказані, то
-  //       if (this.classes.length === 0) {
-  //         // даєм карточці клас за замовчуванням
-  //         this.card = "menu__item";
-  //         // і прописуєм його в класах
-  //         card.classList.add(this.card);
-  //       } else {
-  //         // додаю клас в початок карти з ім'ям, що прийшло з масиву
-  //         this.classes.forEach((className) => card.classList.add(className));
-  //       }
+//       // якщо класи не вказані, то
+//       if (this.classes.length === 0) {
+//         // даєм карточці клас за замовчуванням
+//         this.card = "menu__item";
+//         // і прописуєм його в класах
+//         card.classList.add(this.card);
+//       } else {
+//         // додаю клас в початок карти з ім'ям, що прийшло з масиву
+//         this.classes.forEach((className) => card.classList.add(className));
+//       }
 
-  //       card.innerHTML = `
-  //       		<img src=${this.src} alt=${this.alt}/>
-  //             <h3 class="menu__item-subtitle">${this.title}</h3>
-  //             <div class="menu__item-descr">${this.describe}</div>
-  //             <div class="menu__item-divider"></div>
-  //             <div class="menu__item-price">
-  //               <div class="menu__item-cost">Цена:</div>
-  //               <div class="menu__item-total">
-  //                 <span>${this.price}</span> грн/день
-  //               </div>
-  //             </div>
-  // 		`;
-  //       this.parent.append(card);
-  //     }
-  //   }
+//       card.innerHTML = `
+//         		<img src=${this.src} alt=${this.alt}/>
+//               <h3 class="menu__item-subtitle">${this.title}</h3>
+//               <div class="menu__item-descr">${this.describe}</div>
+//               <div class="menu__item-divider"></div>
+//               <div class="menu__item-price">
+//                 <div class="menu__item-cost">Цена:</div>
+//                 <div class="menu__item-total">
+//                   <span>${this.price}</span> грн/день
+//                 </div>
+//               </div>
+//   		`;
+//       this.parent.append(card);
+//     }
+//   }
   //
   // 1й метод
   //
@@ -190,7 +190,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const res = await fetch(url);
     // .ok - чи все норм?
     // .status -
-    // якщо не ок
+    // якщо не ок бо футч не розуміє 404
     if (!res.ok) {
       // викидаю помилку
       // выполнение текущей функции будет остановлено (инструкции после throw не будут выполнены)
@@ -204,6 +204,28 @@ window.addEventListener("DOMContentLoaded", () => {
   getResourde("http://localhost:3000/menu")
     //беру масив і передаю його ф-ції
     .then((data) => createCard(data));
+
+  //
+  //
+  //  3й бібліотека axios (коли є конструктор)
+  //
+  // отримую данні
+  //   axios.get("http://localhost:3000/menu").then(data => {
+  //   		// обращаюсь до даних які отримав, а не до общого
+  //        data.data.forEach(({ img, altimg, title, descr, price }) => {
+  //           new MenuCard(
+  //             img,
+  //             altimg,
+  //             title,
+  //             descr,
+  //             price,
+  //             ".menu .container"
+  //           ).renderCard();
+  //         });
+  //   });
+  //
+  //
+  //
 
   // ф-ція отримує масив
   function createCard(data) {
