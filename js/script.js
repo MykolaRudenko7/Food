@@ -115,53 +115,53 @@ window.addEventListener("DOMContentLoaded", () => {
   //
   // 1й метод шаблонізація
   //
-//   class MenuCard {
-//     constructor(src, alt, title, describe, price, parentSelector, ...classes) {
-//       this.src = src;
-//       this.alt = alt;
-//       this.title = title;
-//       this.describe = describe;
-//       this.price = price;
+  //   class MenuCard {
+  //     constructor(src, alt, title, describe, price, parentSelector, ...classes) {
+  //       this.src = src;
+  //       this.alt = alt;
+  //       this.title = title;
+  //       this.describe = describe;
+  //       this.price = price;
 
-//       // додаю додаткові класи в масив
-//       this.classes = classes;
+  //       // додаю додаткові класи в масив
+  //       this.classes = classes;
 
-//       this.parent = document.querySelector(parentSelector);
-//       this.exchange = 37;
-//       this.convertUAH();
-//     }
-//     convertUAH() {
-//       this.price = +this.price * +this.exchange;
-//     }
-//     renderCard() {
-//       const card = document.createElement("div");
+  //       this.parent = document.querySelector(parentSelector);
+  //       this.exchange = 37;
+  //       this.convertUAH();
+  //     }
+  //     convertUAH() {
+  //       this.price = +this.price * +this.exchange;
+  //     }
+  //     renderCard() {
+  //       const card = document.createElement("div");
 
-//       // якщо класи не вказані, то
-//       if (this.classes.length === 0) {
-//         // даєм карточці клас за замовчуванням
-//         this.card = "menu__item";
-//         // і прописуєм його в класах
-//         card.classList.add(this.card);
-//       } else {
-//         // додаю клас в початок карти з ім'ям, що прийшло з масиву
-//         this.classes.forEach((className) => card.classList.add(className));
-//       }
+  //       // якщо класи не вказані, то
+  //       if (this.classes.length === 0) {
+  //         // даєм карточці клас за замовчуванням
+  //         this.card = "menu__item";
+  //         // і прописуєм його в класах
+  //         card.classList.add(this.card);
+  //       } else {
+  //         // додаю клас в початок карти з ім'ям, що прийшло з масиву
+  //         this.classes.forEach((className) => card.classList.add(className));
+  //       }
 
-//       card.innerHTML = `
-//         		<img src=${this.src} alt=${this.alt}/>
-//               <h3 class="menu__item-subtitle">${this.title}</h3>
-//               <div class="menu__item-descr">${this.describe}</div>
-//               <div class="menu__item-divider"></div>
-//               <div class="menu__item-price">
-//                 <div class="menu__item-cost">Цена:</div>
-//                 <div class="menu__item-total">
-//                   <span>${this.price}</span> грн/день
-//                 </div>
-//               </div>
-//   		`;
-//       this.parent.append(card);
-//     }
-//   }
+  //       card.innerHTML = `
+  //         		<img src=${this.src} alt=${this.alt}/>
+  //               <h3 class="menu__item-subtitle">${this.title}</h3>
+  //               <div class="menu__item-descr">${this.describe}</div>
+  //               <div class="menu__item-divider"></div>
+  //               <div class="menu__item-price">
+  //                 <div class="menu__item-cost">Цена:</div>
+  //                 <div class="menu__item-total">
+  //                   <span>${this.price}</span> грн/день
+  //                 </div>
+  //               </div>
+  //   		`;
+  //       this.parent.append(card);
+  //     }
+  //   }
   //
   // 1й метод
   //
@@ -337,7 +337,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
   //
   //
-  // spiner
+  // 										Spiner
   //
   //
   //   ф-ція показу модального вікна
@@ -372,4 +372,76 @@ window.addEventListener("DOMContentLoaded", () => {
       hideModal();
     }, 4000);
   }
+  //
+  //
+  //
+  //   										Slider
+  //
+  //
+  // слайди
+  const slides = document.querySelectorAll(".offer__slide");
+  // btn
+  const prevSlide = document.querySelector(".offer__slider-prev");
+  const nextSlide = document.querySelector(".offer__slider-next");
+  // щотчик
+  const total = document.querySelector("#total");
+  const current = document.querySelector("#current");
+  //
+  let slideIndex = 1;
+
+  //показую перший слайд
+  showSlides(slideIndex);
+
+  //   всього
+  //   якщо к-сть слайдів менша 10
+  if (slides.length < 10) {
+    // то в перемінну вивожу текст з 0 + к-сть слайдів
+    total.textContent = `0${slides.length}`;
+  } else {
+    // якщо більше 10, то ссе показую спереду без 0
+    total.textContent = slides.length;
+  }
+
+  // ф-ція показу і скриття слайдів
+  function showSlides(n) {
+    // якщо індекс слайду буде більший чим к-сть слайдів, то переміщаюсь в початок
+    if (n > slides.length) {
+      slideIndex = 1;
+    }
+    //  якщо менший чим к-сть слайдів то  преміщуюсь в кінець
+    if (n < 1) {
+      // 4 - тобто на останній
+      slideIndex = slides.length;
+    }
+
+    // ховаю усі слайди окрім останнього
+    slides.forEach((slide) => {
+      slide.style.display = "none";
+    });
+    slides[slideIndex - 1].style.display = "block";
+
+    // якщо к-сть слайдів менша 10
+    if (slides.length < 10) {
+      // то до перемінної додаєм 0 і теперішній номер слайду
+      current.textContent = `0${slideIndex}`;
+    } else {
+      // якщо більше, то просто номер
+      current.textContent = slideIndex;
+    }
+  }
+
+  // ф-ція 
+  function plusSlide(n) {
+    // додає до перемінної щотчика значення і при прокрутці показує слайд
+    showSlides((slideIndex += n));
+  }
+
+  prevSlide.addEventListener("click", function (e) {
+	// при клікові віднімаю 1, тобто переключаю на попереднє зображення
+    plusSlide(-1);
+  });
+
+  nextSlide.addEventListener("click", function (e) {
+    plusSlide(1);
+  });
 });
