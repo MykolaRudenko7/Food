@@ -1,5 +1,10 @@
+//
+//
+//
 //										 1 Таби
-
+//
+//
+//
 window.addEventListener("DOMContentLoaded", () => {
   const tabsWrapper = document.querySelector(".tabheader__items"),
     tabs = tabsWrapper.querySelectorAll(".tabheader__item"),
@@ -43,9 +48,13 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
-
-  //   						2 Модальні вікна
-
+  //
+  //
+  //
+  //   						 	Модальні вікна
+  //
+  //
+  //
   const modalWindow = document.querySelector(".modal");
   const modalBtns = document.querySelectorAll("[data-modal]");
 
@@ -77,9 +86,13 @@ window.addEventListener("DOMContentLoaded", () => {
       hideModal();
     }
   });
-
-  //   					3 Модальні вікна таймер
-
+  //
+  //
+  //
+  //   							Модальні вікна таймер
+  //
+  //
+  //
   const timerModal = setTimeout(openModal, 50000);
 
   function showModalByScroll() {
@@ -93,102 +106,137 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   window.addEventListener("scroll", showModalByScroll);
+  //
+  //
+  //
+  //											Класи
+  //
+  //
+  //
+  // 1й метод шаблонізація
+  //
+  //   class MenuCard {
+  //     constructor(src, alt, title, describe, price, parentSelector, ...classes) {
+  //       this.src = src;
+  //       this.alt = alt;
+  //       this.title = title;
+  //       this.describe = describe;
+  //       this.price = price;
 
-  //							Класи
+  //       // додаю додаткові класи в масив
+  //       this.classes = classes;
 
-  class MenuCard {
-    constructor(src, alt, title, describe, price, parentSelector, ...classes) {
-      this.src = src;
-      this.alt = alt;
-      this.title = title;
-      this.describe = describe;
-      this.price = price;
+  //       this.parent = document.querySelector(parentSelector);
+  //       this.exchange = 37;
+  //       this.convertUAH();
+  //     }
+  //     convertUAH() {
+  //       this.price = +this.price * +this.exchange;
+  //     }
+  //     renderCard() {
+  //       const card = document.createElement("div");
 
-      // додаю додаткові класи в масив
-      this.classes = classes;
+  //       // якщо класи не вказані, то
+  //       if (this.classes.length === 0) {
+  //         // даєм карточці клас за замовчуванням
+  //         this.card = "menu__item";
+  //         // і прописуєм його в класах
+  //         card.classList.add(this.card);
+  //       } else {
+  //         // додаю клас в початок карти з ім'ям, що прийшло з масиву
+  //         this.classes.forEach((className) => card.classList.add(className));
+  //       }
 
-      this.parent = document.querySelector(parentSelector);
-      this.exchange = 37;
-      this.convertUAH();
+  //       card.innerHTML = `
+  //       		<img src=${this.src} alt=${this.alt}/>
+  //             <h3 class="menu__item-subtitle">${this.title}</h3>
+  //             <div class="menu__item-descr">${this.describe}</div>
+  //             <div class="menu__item-divider"></div>
+  //             <div class="menu__item-price">
+  //               <div class="menu__item-cost">Цена:</div>
+  //               <div class="menu__item-total">
+  //                 <span>${this.price}</span> грн/день
+  //               </div>
+  //             </div>
+  // 		`;
+  //       this.parent.append(card);
+  //     }
+  //   }
+  //
+  // 1й метод
+  //
+  //   // отримую карточки масивом, якщо все добре, то
+  //   getResourde("http://localhost:3000/menu").then((data) => {
+  //     // для кожного ел масиву (елемент це об'єкт) створюю карточку (визив конструктор)
+  //     // щоб було комфортніше - деструктуризація
+  //     data.forEach(({ img, altimg, title, descr, price }) => {
+  //       new MenuCard(
+  //         img,
+  //         altimg,
+  //         title,
+  //         descr,
+  //         price,
+  //         ".menu .container"
+  //       ).renderCard();
+  //     });
+  //   });
+  //
+  //
+  //
+  // 2й метод
+  //
+  // получаєм дані
+  const getResourde = async (url) => {
+    const res = await fetch(url);
+    // .ok - чи все норм?
+    // .status -
+    // якщо не ок
+    if (!res.ok) {
+      // викидаю помилку
+      // выполнение текущей функции будет остановлено (инструкции после throw не будут выполнены)
+      throw new Error(`Could not fetch ${url}, status ${res.status}`);
     }
-    convertUAH() {
-      this.price = +this.price * +this.exchange;
-    }
-    renderCard() {
-      const card = document.createElement("div");
+    //  повертаю результат виконання в форматі json
+    return await res.json();
+  };
 
-      // якщо класи не вказані, то
-      if (this.classes.length === 0) {
-        // даєм карточці клас за замовчуванням
-        this.card = "menu__item";
-        // і прописуєм його в класах
-        card.classList.add(this.card);
-      } else {
-        // додаю клас в початок карти з ім'ям, що прийшло з масиву
-        this.classes.forEach((className) => card.classList.add(className));
-      }
+  // обробляю дані попередньою ф-цією, далі:
+  getResourde("http://localhost:3000/menu")
+    //беру масив і передаю його ф-ції
+    .then((data) => createCard(data));
 
-      card.innerHTML = `
-      		<img src=${this.src} alt=${this.alt}/>
-            <h3 class="menu__item-subtitle">${this.title}</h3>
-            <div class="menu__item-descr">${this.describe}</div>
+  // ф-ція отримує масив
+  function createCard(data) {
+    // перебирає його і витягуєм дані
+    data.forEach(({ img, altimg, title, descr, price }) => {
+      // створ контейнер
+      const element = document.createElement("div");
+      element.classList.add("menu__item");
+      // поміщаю в нього верстку і дані з перебраного масиву
+      element.innerHTML = `
+      		<img src=${img} alt=${altimg}/>
+            <h3 class="menu__item-subtitle">${title}</h3>
+            <div class="menu__item-descr">${descr}</div>
             <div class="menu__item-divider"></div>
             <div class="menu__item-price">
               <div class="menu__item-cost">Цена:</div>
               <div class="menu__item-total">
-                <span>${this.price}</span> грн/день
+                <span>${+price * 40}</span> грн/день
               </div>
             </div>
 		`;
-      this.parent.append(card);
-    }
+      // закидую на сторінку
+      document.querySelector(".menu .container").append(element);
+    });
   }
-
-  new MenuCard(
-    "img/tabs/vegy.jpg",
-    "vegy",
-    'Меню "Фитнес"',
-    'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-    9,
-    ".menu .container"
-    //  тепер навіть коли клас не вказаний, то він ставиться по дефолту
-    //  "menu__item"
-  ).renderCard();
-
-  new MenuCard(
-    "img/tabs/post.jpg",
-    "post",
-    'Меню "Постное"',
-    "Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.",
-    14,
-    ".menu .container",
-    "menu__item"
-  ).renderCard();
-
-  new MenuCard(
-    "img/tabs/elite.jpg",
-    "elite",
-    "Меню “Премиум”",
-    "В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!",
-    21,
-    ".menu .container",
-    "menu__item"
-  ).renderCard();
-
-  //   if
-  // const card1 = new MenuCard(
-  // 	"img/tabs/vegy.jpg",
-  //    "vegy",
-  //    'Меню "Фитнес"',
-  //    'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-  //    9,
-  //    ".menu .container"
-  // 	).renderCard();
-
-  //   								Server
-
-  // forms
-  // форми
+  //
+  //
+  //
+  //   									Server
+  //
+  //
+  //
+  // всі форми
   const forms = document.querySelectorAll("form");
   // об'єкт з повідомленнями
   const message = {
@@ -199,11 +247,26 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // для кожної форми виконуєм функцію
   forms.forEach((form) => {
-    postData(form);
+    bindPostData(form);
   });
 
+  // ф-ція налаштовує запрос (посила на сервер запросс => получа в-дь => транс в джсон)
+  const postData = async (url, data) => {
+    // await - знач дожидаємся  закінч запросу
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: data,
+    });
+    //  повертаєм результат, щоб далі його обробити через then, бо це проміс
+    //  коли перевів, тільки поді повертає
+    return await res.json();
+  };
+
   // ф-ція яка працює при відправці форми
-  function postData(form) {
+  function bindPostData(form) {
     form.addEventListener("submit", (e) => {
       // скидаю перезаваантаження при відправці форми
       e.preventDefault();
@@ -224,28 +287,11 @@ window.addEventListener("DOMContentLoaded", () => {
       const formData = new FormData(form);
 
       // для конвертації форм дати
-      const object = {};
-      // перебираю formData і поміщаю в об'єкт
-      formData.forEach(function (value, key) {
-        // ключ об'єкту = значенню з форм дата
-        object[key] = value;
-      });
+      // роблю з formData масив з масивами => робим об'єкт => робим об'єкт JSON
+      const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-      // краща альтернатива XMLHttp
-      // запрос на отправку данних 1url
-      fetch("server.php", {
-        // 2 obj setings
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        // тип даних тіла повинен відповідати заголовку
-        // превожу мій об'єкт (конверт форм дата) в фоормат Json
-        body: JSON.stringify(object),
-      })
-        // fetch працює на промісах
-        // отримую дату(якщо все норм(response)) і конвертую в текст utf 8
-        .then((data) => data.text())
+      // поверниться проміс, який обробляю then
+      postData("http://localhost:3000/requests", json)
         // затим вивожу
         .then((data) => {
           // вивожу в консоль
@@ -267,9 +313,11 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     });
   }
-
+  //
+  //
   // spiner
-
+  //
+  //
   //   ф-ція показу модального вікна
   function showThanksModal(message) {
     // в константу беру модальне вікно (текст і форму безпосередньо)
@@ -302,11 +350,4 @@ window.addEventListener("DOMContentLoaded", () => {
       hideModal();
     }, 4000);
   }
-
-  //   fetch - принести
-  fetch("http://localhost:3000/menu")
-    // декодую відповідь в формат JSON
-    .then((data) => data.json())
-    // вивожу
-    .then((res) => console.log(res));
 });
