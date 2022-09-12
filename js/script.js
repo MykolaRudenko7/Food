@@ -456,22 +456,23 @@ window.addEventListener("DOMContentLoaded", () => {
   //
   //
   // обертки:
-  const slidesField = document.querySelector(".offer__slider-inner"),
-    slidesWrapper = document.querySelector(".offer__slider-wrapper"),
-    // слайди:
-    slides = document.querySelectorAll(".offer__slide"),
-    // btn:
-    prevSlide = document.querySelector(".offer__slider-prev"),
-    nextSlide = document.querySelector(".offer__slider-next"),
-    // щотчик:
-    total = document.querySelector("#total"),
-    current = document.querySelector("#current"),
-    // витягую в константу ширину блоку
-    width = window.getComputedStyle(slidesWrapper).width;
+  const slidesField = document.querySelector(".offer__slider-inner");
+  const slider = document.querySelector(".offer__slider");
+  const slidesWrapper = document.querySelector(".offer__slider-wrapper");
+  // слайди:
+  const slides = document.querySelectorAll(".offer__slide");
+  // btn:
+  const prevSlide = document.querySelector(".offer__slider-prev");
+  const nextSlide = document.querySelector(".offer__slider-next");
+  // щотчик:
+  const total = document.querySelector("#total");
+  const current = document.querySelector("#current");
+  // витягую в константу ширину блоку
+  const width = window.getComputedStyle(slidesWrapper).width;
   //
-  let slideIndex = 1,
-    offset = 0;
-  //
+  let slideIndex = 1;
+  let offset = 0;
+
   // якщо слайдів менше 10
   if (slides.length < 10) {
     total.textContent = `0${slides.length}`;
@@ -486,7 +487,7 @@ window.addEventListener("DOMContentLoaded", () => {
   slidesField.style.width = 100 * slides.length + "%";
   // слайди в одну лінію + стиль їх переміщення
   slidesField.style.display = "flex";
-  slidesField.style.transition = "0.5s all";
+  slidesField.style.transition = "0.7s all";
   // ховаю остальні слайди, ті що не в обертці
   slidesWrapper.style.overflow = "hidden";
 
@@ -494,6 +495,44 @@ window.addEventListener("DOMContentLoaded", () => {
   slides.forEach((slide) => {
     slide.style.width = width;
   });
+
+  // для точок
+  slider.style.position = "relative";
+  // dots
+  const dots = document.createElement("ol");
+  const dotsMassive = [];
+  //   style
+  dots.classList.add("carousel-indicators");
+  // на сайт
+  slider.append(dots);
+
+  // цикл закінчиться, коли закінчуться слайди
+  for (let i = 0; i < slides.length; i++) {
+    // створ точки
+    const dot = document.createElement("li");
+    // даю їм атрибут до якого слайду вони відносяться
+    dot.setAttribute("data-slide-to", i + 1);
+    // додаю стилі
+    dot.classList.add("dot");
+
+    if (i == 0) {
+      dot.style.opacity = 1;
+    }
+    dots.append(dot);
+    //  поміщаю тоочку в масив
+    dotsMassive.push(dot);
+  }
+
+  function counter() {
+    if (slides.length < 10) {
+      current.textContent = `0${slideIndex}`;
+    } else {
+      current.textContent = slideIndex;
+    }
+
+    dotsMassive.forEach((dot) => (dot.style.opacity = "0.5"));
+    dotsMassive[slideIndex - 1].style.opacity = "1";
+  }
 
   //   якщо нажать на кнопку наступного слайду то:
   nextSlide.addEventListener("click", function (e) {
@@ -518,11 +557,7 @@ window.addEventListener("DOMContentLoaded", () => {
       slideIndex++;
     }
 
-    if (slides.length < 10) {
-      current.textContent = `0${slideIndex}`;
-    } else {
-      current.textContent = slideIndex;
-    }
+    counter();
   });
 
   //   попередній слайд
@@ -544,14 +579,20 @@ window.addEventListener("DOMContentLoaded", () => {
       slideIndex--;
     }
 
-    if (slides.length < 10) {
-      current.textContent = `0${slideIndex}`;
-    } else {
-      current.textContent = slideIndex;
-    }
+    counter();
   });
-  //
-  //
+
+  //   управління через точки
+  dotsMassive.forEach((dot) => {
+    dot.addEventListener("click", (e) => {
+      const slideTo = e.target.getAttribute("data-slide-to");
+      slideIndex = slideTo;
+      offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+      slidesField.style.transform = `translateX(-${offset}px)`;
+
+      counter();
+    });
+  });
   //
   //
   //
