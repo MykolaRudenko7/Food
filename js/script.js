@@ -377,71 +377,182 @@ window.addEventListener("DOMContentLoaded", () => {
   //
   //   										Slider
   //
-  //
-  // слайди
-  const slides = document.querySelectorAll(".offer__slide");
-  // btn
-  const prevSlide = document.querySelector(".offer__slider-prev");
-  const nextSlide = document.querySelector(".offer__slider-next");
-  // щотчик
-  const total = document.querySelector("#total");
-  const current = document.querySelector("#current");
-  //
-  let slideIndex = 1;
+  //   //
+  //   // слайди
+  //   const slides = document.querySelectorAll(".offer__slide");
+  //   // btn
+  //   const prevSlide = document.querySelector(".offer__slider-prev");
+  //   const nextSlide = document.querySelector(".offer__slider-next");
+  //   // щотчик
+  //   const total = document.querySelector("#total");
+  //   const current = document.querySelector("#current");
+  //   //
+  //   let slideIndex = 1;
+  //   //
+  //   //
+  //   //
+  //   // 											варіант 1
+  //   //
+  //   //
+  //   //
+  //   //показую перший слайд
+  //   showSlides(slideIndex);
 
-  //показую перший слайд
-  showSlides(slideIndex);
+  //   //   всього
+  //   //   якщо к-сть слайдів менша 10
+  //   if (slides.length < 10) {
+  //     // то в перемінну вивожу текст з 0 + к-сть слайдів
+  //     total.textContent = `0${slides.length}`;
+  //   } else {
+  //     // якщо більше 10, то ссе показую спереду без 0
+  //     total.textContent = slides.length;
+  //   }
 
-  //   всього
-  //   якщо к-сть слайдів менша 10
+  //   // ф-ція показу і скриття слайдів
+  //   function showSlides(n) {
+  //     // якщо індекс слайду буде більший чим к-сть слайдів, то переміщаюсь на початок
+  //     if (n > slides.length) {
+  //       slideIndex = 1;
+  //     }
+  //     //  якщо менший чим к-сть слайдів то преміщуюсь в кінець
+  //     if (n < 1) {
+  //       // 4 - тобто на останній
+  //       slideIndex = slides.length;
+  //     }
+  //     // ховаю усі слайди окрім останнього
+  //     slides.forEach((slide) => {
+  //       slide.style.display = "none";
+  //     });
+  //     slides[slideIndex - 1].style.display = "block";
+
+  //     // якщо к-сть слайдів менша 10
+  //     if (slides.length < 10) {
+  //       // то до перемінної додаєм 0 і теперішній номер слайду
+  //       current.textContent = `0${slideIndex}`;
+  //     } else {
+  //       // якщо більше, то просто номер
+  //       current.textContent = slideIndex;
+  //     }
+  //   }
+
+  //   // ф-ція
+  //   function plusSlide(n) {
+  //     // додає до перемінної щотчика значення і при прокрутці показує слайд
+  //     showSlides((slideIndex += n));
+  //   }
+
+  //   prevSlide.addEventListener("click", function (e) {
+  // 	// при клікові віднімаю 1, тобто переключаю на попереднє зображення
+  //     plusSlide(-1);
+  //   });
+
+  //   nextSlide.addEventListener("click", function (e) {
+  //     plusSlide(1);
+  //   });
+  //
+  //
+  //
+  //  									варіант 2
+  //
+  //
+  // обертки:
+  const slidesField = document.querySelector(".offer__slider-inner"),
+    slidesWrapper = document.querySelector(".offer__slider-wrapper"),
+    // слайди:
+    slides = document.querySelectorAll(".offer__slide"),
+    // btn:
+    prevSlide = document.querySelector(".offer__slider-prev"),
+    nextSlide = document.querySelector(".offer__slider-next"),
+    // щотчик:
+    total = document.querySelector("#total"),
+    current = document.querySelector("#current"),
+    // витягую в константу ширину блоку
+    width = window.getComputedStyle(slidesWrapper).width;
+  //
+  let slideIndex = 1,
+    offset = 0;
+  //
+  // якщо слайдів менше 10
   if (slides.length < 10) {
-    // то в перемінну вивожу текст з 0 + к-сть слайдів
     total.textContent = `0${slides.length}`;
+    current.textContent = `0${slideIndex}`;
   } else {
-    // якщо більше 10, то ссе показую спереду без 0
+    // якщо більше
     total.textContent = slides.length;
+    current.textContent = slideIndex;
   }
 
-  // ф-ція показу і скриття слайдів
-  function showSlides(n) {
-    // якщо індекс слайду буде більший чим к-сть слайдів, то переміщаюсь в початок
-    if (n > slides.length) {
+  // поміщаю усі слайди на сторінці в цей блок-обертку задаючи йому ширину рівну всім слайдам
+  slidesField.style.width = 100 * slides.length + "%";
+  // слайди в одну лінію + стиль їх переміщення
+  slidesField.style.display = "flex";
+  slidesField.style.transition = "0.5s all";
+  // ховаю остальні слайди, ті що не в обертці
+  slidesWrapper.style.overflow = "hidden";
+
+  // кожному слайду задаю ширину рівну перемінній with (общій обертці)
+  slides.forEach((slide) => {
+    slide.style.width = width;
+  });
+
+  //   якщо нажать на кнопку наступного слайду то:
+  nextSlide.addEventListener("click", function (e) {
+    // якщо перемінна буде дорівнювать ширині всих слайдів, то повертаєм на 1й слайд
+    //  with - роблю числом і вирізаю з нього останні 2 символи (рх) ( з 0 до довжини без 2х останніх)
+    // Метод slice() извлекает часть строки и возвращает новую строку без изменения оригинальной строки.
+    if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+      offset = 0;
+    } else {
+      // коли вперед то до офсет добавляється ширина слайду
+      offset += +width.slice(0, width.length - 2);
+    }
+
+    //  при клікові передвигаю на число з перемінної
+    slidesField.style.transform = `translateX(-${offset}px)`;
+
+    // контролю індекс
+    if (slideIndex == slides.length) {
       slideIndex = 1;
-    }
-    //  якщо менший чим к-сть слайдів то  преміщуюсь в кінець
-    if (n < 1) {
-      // 4 - тобто на останній
-      slideIndex = slides.length;
+      // якшо не дійшов до кінця
+    } else {
+      slideIndex++;
     }
 
-    // ховаю усі слайди окрім останнього
-    slides.forEach((slide) => {
-      slide.style.display = "none";
-    });
-    slides[slideIndex - 1].style.display = "block";
-
-    // якщо к-сть слайдів менша 10
     if (slides.length < 10) {
-      // то до перемінної додаєм 0 і теперішній номер слайду
       current.textContent = `0${slideIndex}`;
     } else {
-      // якщо більше, то просто номер
       current.textContent = slideIndex;
     }
-  }
+  });
 
-  // ф-ція 
-  function plusSlide(n) {
-    // додає до перемінної щотчика значення і при прокрутці показує слайд
-    showSlides((slideIndex += n));
-  }
-
+  //   попередній слайд
   prevSlide.addEventListener("click", function (e) {
-	// при клікові віднімаю 1, тобто переключаю на попереднє зображення
-    plusSlide(-1);
-  });
+    // якщо преший слайд
+    if (offset == 0) {
+      // то офсет дорівнюватиме  ширині всих слайдів (ставиться 1й)
+      offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+    } else {
+      // коли назад то від офсет віднімається ширина слайду
+      offset -= +width.slice(0, width.length - 2);
+    }
+    //  при клікові передвигаю на число з перемінної
+    slidesField.style.transform = `translateX(-${offset}px)`;
 
-  nextSlide.addEventListener("click", function (e) {
-    plusSlide(1);
+    if (slideIndex == 1) {
+      slideIndex = slides.length;
+    } else {
+      slideIndex--;
+    }
+
+    if (slides.length < 10) {
+      current.textContent = `0${slideIndex}`;
+    } else {
+      current.textContent = slideIndex;
+    }
   });
+  //
+  //
+  //
+  //
+  //
 });
