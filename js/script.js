@@ -598,5 +598,106 @@ window.addEventListener("DOMContentLoaded", () => {
   });
   //
   //
+  //   								Calculator
+  //
+  //
+  //
+  const result = document.querySelector(".calculating__result span");
+  let gender = "female",
+    ratio = "1.75",
+    height,
+    weight,
+    age;
+
+  function calcTotal() {
+    // якщо чогось немає, то виводим повідомлення і перериваєм
+    if (!gender || !height || !weight || !age || !ratio) {
+      result.textContent = "___";
+      // прериваєм ф-цію
+      return;
+    }
+
+    // якщо стать жіноча
+    if (gender === "female") {
+      // округляю
+      result.textContent = Math.round(
+        (447.6 + 9.2 * weight + 3.1 * height - 4.3 * age) * ratio
+      );
+    } else {
+      result.textContent = Math.round(
+        (88.36 + 13.4 * weight + 4.8 * height - 5.7 * age) * ratio
+      );
+    }
+  }
+
+  calcTotal();
+
+  // для класів і атрибутів
+  function getStaticInf(parentSel, activeClass) {
+    // отримую діви з цього елементу
+    const elements = document.querySelectorAll(`${parentSel} div`);
+
+    // на кожен елемент навішую подію
+    elements.forEach((element) => {
+      element.addEventListener("click", (e) => {
+        // якщо на нажатій конпці є атрибут (getAttr - повертає значення атрибуту, якщо немає атрибуту, то null), то
+        if (e.target.getAttribute("data-ratio")) {
+          // присвоюю значення цій перемінній як у атрибута
+          ratio = +e.target.getAttribute("data-ratio");
+        } else {
+          gender = e.target.getAttribute("id");
+        }
+        // видаляю активній клас у всіх
+        elements.forEach((el) => {
+          el.classList.remove(activeClass);
+        });
+
+        // даю активний клас при клікові
+        e.target.classList.add(activeClass);
+
+        // перераховую
+        calcTotal();
+      });
+    });
+  }
+
+  getStaticInf("#gender", "calculating__choose-item_active");
+  getStaticInf(".calculating__choose_big", "calculating__choose-item_active");
+
+  // ф-ція для записів значень інпуту в перемінні
+  function getDynamicInf(selector) {
+    const input = document.querySelector(selector);
+
+    input.addEventListener("input", function (e) {
+      // чи є атрибут id => якщо і його значеення
+      switch (input.getAttribute("id")) {
+        // якщо рост
+        case "height":
+          // даэм перемынный значення з інпуту(числове)
+          height = +input.value;
+          //  остановлюю
+          break;
+        case "weight":
+          weight = +input.value;
+          break;
+        case "age":
+          age = +input.value;
+          break;
+      }
+      //  перераховуєм після вводду в інпут
+      calcTotal();
+    });
+  }
+
+  getDynamicInf("#height");
+  getDynamicInf("#weight");
+  getDynamicInf("#age");
+
+
+
+
+
+  //
+  //
   //
 });
