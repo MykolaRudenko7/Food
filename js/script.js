@@ -534,16 +534,19 @@ window.addEventListener("DOMContentLoaded", () => {
     dotsMassive[slideIndex - 1].style.opacity = "1";
   }
 
+  // регудярним виразом буду вирізать букви із значень
+  function dellLetter(str) {
+    return +str.replace(/\D/g, "");
+  }
+
   //   якщо нажать на кнопку наступного слайду то:
   nextSlide.addEventListener("click", function (e) {
     // якщо перемінна буде дорівнювать ширині всих слайдів, то повертаєм на 1й слайд
-    //  with - роблю числом і вирізаю з нього останні 2 символи (рх) ( з 0 до довжини без 2х останніх)
-    // Метод slice() извлекает часть строки и возвращает новую строку без изменения оригинальной строки.
-    if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+    if (offset == dellLetter(width) * (slides.length - 1)) {
       offset = 0;
     } else {
       // коли вперед то до офсет добавляється ширина слайду
-      offset += +width.slice(0, width.length - 2);
+      offset += dellLetter(width);
     }
 
     //  при клікові передвигаю на число з перемінної
@@ -564,11 +567,11 @@ window.addEventListener("DOMContentLoaded", () => {
   prevSlide.addEventListener("click", function (e) {
     // якщо преший слайд
     if (offset == 0) {
-      // то офсет дорівнюватиме  ширині всих слайдів (ставиться 1й)
-      offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+      // тo офсет дорівнюватиме  ширині всих слайдів (ставиться 1й)
+      offset = dellLetter(width) * (slides.length - 1);
     } else {
       // коли назад то від офсет віднімається ширина слайду
-      offset -= +width.slice(0, width.length - 2);
+      offset -= dellLetter(width);
     }
     //  при клікові передвигаю на число з перемінної
     slidesField.style.transform = `translateX(-${offset}px)`;
@@ -587,7 +590,7 @@ window.addEventListener("DOMContentLoaded", () => {
     dot.addEventListener("click", (e) => {
       const slideTo = e.target.getAttribute("data-slide-to");
       slideIndex = slideTo;
-      offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+      offset = dellLetter(width) * (slideTo - 1);
       slidesField.style.transform = `translateX(-${offset}px)`;
 
       counter();
