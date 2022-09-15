@@ -1,4 +1,13 @@
-function slider() {
+function slider({
+  container,
+  slide,
+  nextArrow,
+  prevArrow,
+  totalCounter,
+  currentCounter,
+  wrapper,
+  field,
+}) {
   //   const slides = document.querySelectorAll(".offer__slide");
   //   // btn
   //   const prevSlide = document.querySelector(".offer__slider-prev");
@@ -76,17 +85,17 @@ function slider() {
   //
   //
   // обертки:
-  const slidesField = document.querySelector(".offer__slider-inner");
-  const slider = document.querySelector(".offer__slider");
-  const slidesWrapper = document.querySelector(".offer__slider-wrapper");
+  const slidesField = document.querySelector(field);
+  const slider = document.querySelector(container);
+  const slidesWrapper = document.querySelector(wrapper);
   // слайди:
-  const slides = document.querySelectorAll(".offer__slide");
+  const slides = document.querySelectorAll(slide);
   // btn:
-  const prevSlide = document.querySelector(".offer__slider-prev");
-  const nextSlide = document.querySelector(".offer__slider-next");
+  const prevSlide = document.querySelector(prevArrow);
+  const nextSlide = document.querySelector(nextArrow);
   // щотчик:
-  const total = document.querySelector("#total");
-  const current = document.querySelector("#current");
+  const total = document.querySelector(totalCounter);
+  const current = document.querySelector(currentCounter);
   // витягую в константу ширину блоку
   const width = window.getComputedStyle(slidesWrapper).width;
   //

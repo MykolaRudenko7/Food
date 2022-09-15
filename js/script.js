@@ -29,9 +29,19 @@ window.addEventListener("DOMContentLoaded", () => {
     "tabheader__item_active"
   );
   modal("[data-modal]", ".modal", timerModal);
-  timer(".timer", "2022-06-11");
+  //   селектор таймера і дата
+  timer(".timer", "2022-12-31");
   cards();
   calculator();
   forms("form", timerModal);
-  slider();
+  slider({
+    container: ".offer__slider",
+    slide: ".offer__slide",
+    nextArrow: ".offer__slider-next",
+    prevArrow: ".offer__slider-prev",
+    totalCounter: "#total",
+    currentCounter: "#current",
+    wrapper: ".offer__slider-wrapper",
+    field: ".offer__slider-inner",
+  });
 });
