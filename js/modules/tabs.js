@@ -1,9 +1,12 @@
-function tabs() {
-  const tabsWrapper = document.querySelector(".tabheader__items"),
-    tabs = tabsWrapper.querySelectorAll(".tabheader__item"),
-    tabContents = document.querySelectorAll(".tabcontent");
-
-  // 1
+function tabs(
+  tabsSelector,
+  tabsContentSelector,
+  tabsParentSelector,
+  activeClass
+) {
+  let tabs = document.querySelectorAll(tabsSelector);
+  let tabContents = document.querySelectorAll(tabsContentSelector);
+  let tabsWrapper = document.querySelector(tabsParentSelector);
 
   function hideTabContent() {
     tabContents.forEach((item) => {
@@ -12,27 +15,24 @@ function tabs() {
     });
 
     tabs.forEach((tab) => {
-      tab.classList.remove("tabheader__item_active");
+      tab.classList.remove(activeClass);
     });
   }
 
-  // 2
-
   function showTabContent(i = 0) {
-    tabContents[i].classList.add("show");
+    tabContents[i].classList.add("show", "fade");
     tabContents[i].classList.remove("hide");
 
-    tabs[i].classList.add("tabheader__item_active");
+    tabs[i].classList.add(activeClass);
   }
 
   hideTabContent();
   showTabContent();
 
-  // 3
-
   tabsWrapper.addEventListener("click", (e) => {
     const target = e.target;
-    if (target && target.classList.contains("tabheader__item")) {
+    //  нова строка, але без першого символу(без крапки)
+    if (target && target.classList.contains(tabsSelector.slice(1))) {
       tabs.forEach((tab, i) => {
         if (target == tab) {
           hideTabContent();
@@ -43,4 +43,5 @@ function tabs() {
   });
 }
 
-module.exports = tabs;
+// module.exports = tabs;
+export default tabs;

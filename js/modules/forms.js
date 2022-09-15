@@ -1,6 +1,13 @@
-function forms() {
+// імпортую з модальних вікон
+import { openModal, hideModal } from "./modal";
+//
+import { postData } from "../services/services";
+//
+//
+//
+function forms(formSelector, timerModal) {
   // всі форми
-  const forms = document.querySelectorAll("form");
+  const forms = document.querySelectorAll(formSelector);
   // об'єкт з повідомленнями
   const message = {
     loading: "img/form/spinner.svg",
@@ -13,20 +20,7 @@ function forms() {
     bindPostData(form);
   });
 
-  // ф-ція налаштовує запрос (посила на сервер запросс => получа в-дь => транс в джсон)
-  const postData = async (url, data) => {
-    // await - знач дожидаємся  закінч запросу
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: data,
-    });
-    //  повертаєм результат, щоб далі його обробити через then, бо це проміс
-    //  коли перевів, тільки поді повертає
-    return await res.json();
-  };
+  //   function services
 
   // ф-ція яка працює при відправці форми
   function bindPostData(form) {
@@ -76,6 +70,40 @@ function forms() {
         });
     });
   }
+
+  //   ф-ція показу модального вікна
+  function showThanksModal(message) {
+    // в константу беру модальне вікно (текст і форму безпосередньо)
+    const prevModalDialog = document.querySelector(".modal__dialog");
+    // ховаю
+    prevModalDialog.classList.add("hide");
+
+    // показую модальне вікно
+    openModal(".modal", timerModal);
+
+    // верстаю текст для виводу на місце де була форма з текстом
+    const thanksModal = document.createElement("div");
+    thanksModal.classList.add("modal__dialog");
+    thanksModal.innerHTML = `
+	 		<div class="modal__content">
+         	<div class="modal__close" data-close>×</div>
+         	<div class="modal__title">${message}</div>
+      	</div>
+		`;
+    document.querySelector(".modal").append(thanksModal);
+
+    //  ця ф-ція триває 4с
+    setTimeout(() => {
+      // видаляю стан
+      thanksModal.remove();
+      // показую стару форму
+      prevModalDialog.classList.add("show");
+      prevModalDialog.classList.remove("hide");
+      // і ховаю стару форму
+      hideModal(".modal");
+    }, 4000);
+  }
 }
 
-module.exports = forms;
+// module.exports = forms;
+export default forms;

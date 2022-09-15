@@ -1,82 +1,61 @@
-function modal() {
-  const modalWindow = document.querySelector(".modal");
-  const modalBtns = document.querySelectorAll("[data-modal]");
+function hideModal(modalWindowsSelector) {
+  const modalWindow = document.querySelector(modalWindowsSelector);
 
-  modalBtns.forEach((btn) => {
-    btn.addEventListener("click", openModal);
-  });
+  modalWindow.classList.add("hide");
+  modalWindow.classList.remove("show");
+  document.body.style.overflow = "";
+}
 
-  function openModal() {
-    modalWindow.classList.remove("hide");
-    modalWindow.classList.add("show");
-    document.body.style.overflow = "hidden";
+function openModal(modalWindowsSelector, timerModal) {
+  const modalWindow = document.querySelector(modalWindowsSelector);
+
+  modalWindow.classList.add("show");
+  modalWindow.classList.remove("hide");
+  document.body.style.overflow = "hidden";
+
+  if (timerModal) {
     clearInterval(timerModal);
   }
+}
 
-  function hideModal() {
-    modalWindow.classList.remove("show");
-    modalWindow.classList.add("hide");
-    document.body.style.overflow = "";
-  }
+function modal(btnsSelector, modalWindowsSelector, timerModal) {
+  const modalBtns = document.querySelectorAll(btnsSelector);
+  const modalWindow = document.querySelector(modalWindowsSelector);
+
+  modalBtns.forEach((btn) => {
+    // не можна зразу визивать коллбек ф-цію (просто об'явить), щоб обійти це, обворачують  в стріллочну ф-цію
+    btn.addEventListener("click", () =>
+      openModal(modalWindowsSelector, timerModal)
+    );
+  });
 
   modalWindow.addEventListener("click", (e) => {
     if (e.target === modalWindow || e.target.getAttribute("data-close") == "") {
-      hideModal();
+      hideModal(modalWindowsSelector);
     }
   });
 
   document.addEventListener("keydown", function (e) {
     if (e.code === "Escape" && modalWindow.classList.contains("show")) {
-      hideModal();
+      hideModal(modalWindowsSelector);
     }
   });
-
-  const timerModal = setTimeout(openModal, 50000);
 
   function showModalByScroll() {
     if (
       window.pageYOffset + document.documentElement.clientHeight >=
       document.documentElement.scrollHeight - 1
     ) {
-      openModal();
+      openModal(modalWindowsSelector, timerModal);
       window.removeEventListener("scroll", showModalByScroll);
     }
   }
-
   window.addEventListener("scroll", showModalByScroll);
-
-  //   ф-ція показу модального вікна
-  function showThanksModal(message) {
-    // в константу беру модальне вікно (текст і форму безпосередньо)
-    const prevModalDialog = document.querySelector(".modal__dialog");
-    // ховаю
-    prevModalDialog.classList.add("hide");
-
-    // показую модальне вікно
-    openModal();
-
-    // верстаю текст для виводу на місце де була форма з текстом
-    const thanksModal = document.createElement("div");
-    thanksModal.classList.add("modal__dialog");
-    thanksModal.innerHTML = `
-	 		<div class="modal__content">
-         	<div class="modal__close" data-close>×</div>
-         	<div class="modal__title">${message}</div>
-      	</div>
-		`;
-    document.querySelector(".modal").append(thanksModal);
-
-    //  ця ф-ція триває 4с
-    setTimeout(() => {
-      // видаляю стан
-      thanksModal.remove();
-      // показую стару форму
-      prevModalDialog.classList.add("show");
-      prevModalDialog.classList.remove("hide");
-      // і ховаю стару форму
-      hideModal();
-    }, 4000);
-  }
 }
 
-module.exports = modal;
+// module.exports = modal;
+export default modal;
+
+// щоб не було помилок (експортую в форми)
+export { openModal };
+export { hideModal };

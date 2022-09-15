@@ -1,3 +1,7 @@
+import { posrData, getResourse } from "../services/services";
+//
+//
+//
 function cards() {
   // 1й метод шаблонізація
   //
@@ -72,22 +76,10 @@ function cards() {
   // 2й метод
   //
   // получаєм дані
-  const getResourde = async (url) => {
-    const res = await fetch(url);
-    // .ok - чи все норм?
-    // .status -
-    // якщо не ок бо футч не розуміє 404
-    if (!res.ok) {
-      // викидаю помилку
-      // выполнение текущей функции будет остановлено (инструкции после throw не будут выполнены)
-      throw new Error(`Could not fetch ${url}, status ${res.status}`);
-    }
-    //  повертаю результат виконання в форматі json
-    return await res.json();
-  };
+  //  function getRes
 
   // обробляю дані попередньою ф-цією, далі:
-  getResourde("http://localhost:3000/menu")
+  getResourse("http://localhost:3000/menu")
     //беру масив і передаю його ф-ції
     .then((data) => createCard(data));
 
@@ -140,4 +132,5 @@ function cards() {
   }
 }
 
-module.exports = cards;
+// module.exports = cards;
+export default cards;
