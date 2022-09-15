@@ -1,3 +1,6 @@
+require("es6-promise").polyfill();
+// імпорт пакету НПМ
+import "nodelist-foreach-polyfill";
 //   або так (ES6)
 import tabs from "./modules/tabs";
 import modal from "./modules/modal";
